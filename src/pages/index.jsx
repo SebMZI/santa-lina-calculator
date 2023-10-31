@@ -11,29 +11,51 @@ const gaz = 1.5;
 const elec = 0.5;
 
 export default function Home() {
-  const [elecStart, setElectStart] = useState(0);
-  const [elecEnd, setElectEnd] = useState(0);
-  const [gazStart, setGazStart] = useState(0);
-  const [gazEnd, setGazEnd] = useState(0);
-  const [eauStart, setEauStart] = useState(0);
-  const [eauEnd, setEauEnd] = useState(0);
-  const [totalEau, setTotalEau] = useState(0);
-  const [totlaGaz, setTotalGaz] = useState(0);
-  const [totalElec, setTotalElec] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [elecStart, setElectStart] = useState();
+  const [elecEnd, setElectEnd] = useState();
+  const [gazStart, setGazStart] = useState();
+  const [gazEnd, setGazEnd] = useState();
+  const [eauStart, setEauStart] = useState();
+  const [eauEnd, setEauEnd] = useState();
+  const [totalEau, setTotalEau] = useState();
+  const [totlaGaz, setTotalGaz] = useState();
+  const [totalElec, setTotalElec] = useState();
+  const [total, setTotal] = useState();
+  const [msg, setMsg] = useState("");
+
+  setTimeout(() => {
+    if (msg) {
+      setMsg("");
+    }
+  }, 3000);
 
   const handleCalculate = () => {
+    if (
+      !elecStart ||
+      !elecEnd ||
+      !gazStart ||
+      !gazEnd ||
+      !eauStart ||
+      !eauEnd
+    ) {
+      return setMsg("Tous les champs sont obligatoires!");
+    }
     setTotalEau(0);
     setTotalElec(0);
     setTotalGaz(0);
     setTotal(0);
+
     const eauArrDep = eauEnd - eauStart;
     const elecArrDep = elecEnd - elecStart;
     const gazArrDep = gazEnd - gazStart;
-    setTotalEau(eauArrDep * eau);
-    setTotalElec(elecArrDep * elec);
-    setTotalGaz(gazArrDep * gaz);
-    const totalPrix = totlaGaz + totalEau + totalElec;
+    const prixEau = eauArrDep * eau;
+    const prixElec = elecArrDep * elec;
+    const prixGaz = gazArrDep * gaz;
+    const totalPrix = prixEau + prixElec + prixGaz;
+
+    setTotalEau(prixEau);
+    setTotalElec(prixElec);
+    setTotalGaz(prixGaz);
     setTotal(totalPrix);
   };
 
@@ -47,59 +69,80 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <div className={`${styles.container}`}>
-          <div>
-            <h2>Arrivée</h2>
-            <label htmlFor="elecdep">Electricité</label>
-            <input
-              type="number"
-              id="elecdep"
-              min={0}
-              onChange={(e) => setElectStart(e.target.value)}
-            />
-            <label htmlFor="eaudep">Eau</label>
-            <input
-              type="number"
-              id="eaudep"
-              min={0}
-              onChange={(e) => setEauStart(e.target.value)}
-            />
-            <label htmlFor="gazdep">Gaz</label>
-            <input
-              type="number"
-              min={0}
-              onChange={(e) => setGazStart(e.target.value)}
-            />
+          <h1 className={`${styles.title}`}>Calculateur charges Santa Lina</h1>
+          <p className={`${styles.info}`}>
+            * Prendre uniquement en compte les chiffres dans la partie noire
+          </p>
+
+          <div className={`${styles.content}`}>
+            <div className={`${styles.item}`}>
+              <h2>Arrivée</h2>
+              <label htmlFor="elecdep">Electricité</label>
+              <input
+                type="number"
+                id="elecdep"
+                min={0}
+                onChange={(e) => setElectStart(e.target.value)}
+                className={`${styles.input}`}
+              />
+              <label htmlFor="eaudep">Eau *</label>
+              <input
+                type="number"
+                id="eaudep"
+                min={0}
+                onChange={(e) => setEauStart(e.target.value)}
+                className={`${styles.input}`}
+              />
+              <label htmlFor="gazdep">Gaz *</label>
+              <input
+                type="number"
+                min={0}
+                onChange={(e) => setGazStart(e.target.value)}
+                className={`${styles.input}`}
+              />
+            </div>
+            <div className={`${styles.item}`}>
+              <h2>Départ</h2>
+              <label htmlFor="elecend">Electricité</label>
+              <input
+                type="number"
+                id="elecend"
+                min={0}
+                onChange={(e) => setElectEnd(e.target.value)}
+                className={`${styles.input}`}
+              />
+              <label htmlFor="eauend">Eau *</label>
+              <input
+                type="number"
+                id="eauend"
+                min={0}
+                onChange={(e) => setEauEnd(e.target.value)}
+                className={`${styles.input}`}
+              />
+              <label htmlFor="gazend">Gaz *</label>
+              <input
+                type="number"
+                min={0}
+                onChange={(e) => setGazEnd(e.target.value)}
+                className={`${styles.input}`}
+              />
+            </div>
           </div>
-          <div>
-            <h2>Départ</h2>
-            <label htmlFor="elecend">Electricité</label>
-            <input
-              type="number"
-              id="elecend"
-              min={0}
-              onChange={(e) => setElectEnd(e.target.value)}
-            />
-            <label htmlFor="eauend">Eau</label>
-            <input
-              type="number"
-              id="eauend"
-              min={0}
-              onChange={(e) => setEauEnd(e.target.value)}
-            />
-            <label htmlFor="gazend">Gaz</label>
-            <input
-              type="number"
-              min={0}
-              onChange={(e) => setGazEnd(e.target.value)}
-            />
+          <div className={`${styles.validate}`}>
+            <button
+              className={`${styles.button}`}
+              onClick={(e) => handleCalculate()}
+            >
+              Calculer
+            </button>
+            <p className={`${styles.msg}`}>{msg}</p>
           </div>
-          <button onClick={(e) => handleCalculate()}>Calculer</button>
-          <div>
+          <div className={`${styles.totaux}`}>
             <h2>Totaux:</h2>
             <p>Eau: {totalEau}€</p>
             <p>Gaz: {totlaGaz}€</p>
             <p>Elec: {totalElec}€</p>
-            <p>Total: {total}€ </p>
+            <p className={`${styles.total}`}>Total: {total}€ </p>
           </div>
         </div>
       </main>

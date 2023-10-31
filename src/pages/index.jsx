@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Prix en €
 const eau = 4;
 const gaz = 1.5;
 const elec = 0.5;
@@ -40,10 +41,10 @@ export default function Home() {
     ) {
       return setMsg("Tous les champs sont obligatoires!");
     }
-    setTotalEau(0);
-    setTotalElec(0);
-    setTotalGaz(0);
-    setTotal(0);
+    setTotalEau();
+    setTotalElec();
+    setTotalGaz();
+    setTotal();
 
     const eauArrDep = eauEnd - eauStart;
     const elecArrDep = elecEnd - elecStart;
